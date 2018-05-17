@@ -1,0 +1,91 @@
+#!/bin/bash
+
+on_error(){
+  red_text 'Something bad happened and the party must stop. Please check the logs'
+  exit 1
+}
+
+trap 'on_error' ERR
+
+cd $(dirname $(dirname $0))
+
+blue_text(){
+  echo "`tput setaf 4`$@`tput sgr0`"
+}
+
+yellow_text(){
+  echo "`tput setaf 3`$@`tput sgr0`"
+}
+
+red_text(){
+  echo "`tput setaf 1`$@`tput sgr0`"
+}
+
+green_text(){
+  echo "`tput setaf 2`$@`tput sgr0`"
+}
+
+build_docker_image(){
+  if [ -f Dockerfile  ]; then
+    docker build --build-arg UID=$UID -t component .
+  else
+    red_text 'Could not find Dockerfile. WTF?'
+    return
+  fi
+}
+
+export_script_path(){
+  files=(.bashrc .zshrc .bash_profile)
+  for f in ${files[@]}; do
+    filename="$HOME/$f"
+
+    if [ -f $filename  ]; then
+      if ! $(grep 'component/script' $filename &>/dev/null);
+      then
+        green_text "Adding component script to $f"
+
+        echo >> $filename
+        echo '# component' >> $filename
+        echo "export PATH=\"\$PATH:$(pwd)/scripts\"" >> $filename
+      fi
+    fi
+  done
+}
+
+run(){
+  docker-compose run --rm webpack $@
+}
+
+##########################
+### Build docker image ###
+##########################
+
+yellow_text 'Building component image, this might take a while...'
+
+if [[ $(docker images | grep component) ]]; then
+  green_text 'Found component docker image. Do you want to rebuild it? (y/N)'
+  read build_image
+
+  if [[ $build_image == 'y' ]]; then
+    build_docker_image
+  else
+    yellow_text 'Ok, skipping...'
+  fi
+else
+  build_docker_image
+fi
+
+###############################
+### Installing dependencies ###
+###############################
+
+yellow_text 'Installing packages'
+docker-compose run --rm webpack yarn --modules-folder /node_modules --verbose
+
+########################
+### Final moments :) ###
+########################
+
+export_script_path
+
+green_text 'Everything ready to run component!'

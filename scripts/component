@@ -1,0 +1,50 @@
+#!/bin/bash
+
+yellow=$(tput setaf 3)
+
+white=$(tput sgr0)
+
+blue_text(){
+  echo "`tput setaf 4`$@`tput sgr0`"
+}
+
+green_text(){
+  echo "`tput setaf 2`$@`tput sgr0`"
+}
+
+run(){
+  docker-compose run --rm webpack $@
+}
+
+case $1 in
+  setup)
+    ./scripts/setup
+    ./scripts/component
+    blue_text 'Now run: source ~/.bashrc'
+    ;;
+  dev)
+    run yarn --modules-folder /node_modules dev
+    ;;
+  yarn)
+    run yarn --modules-folder /node_modules ${@:2}
+    ;;
+  bash)
+    run bash
+    ;;
+  *)
+    blue_text 'This is the component script you can use to run yarn, webpack-dev-server and etc.'
+    echo
+    echo 'Usage: component <option> <arguments>'
+    green_text 'Examples:'
+    echo 'component yarn dev'
+    echo 'component yarn unit'
+    echo 'component yarn unit:coverage'
+    echo 'component bash'
+    echo
+    echo 'Available options:'
+    echo " ${yellow}setup:${white} used to setup the development environment"
+    echo " ${yellow}dev:${white} start webpack"
+    echo " ${yellow}yarn:${white} runs yarn commands inside the container"
+    echo " ${yellow}bash:${white} opens up a bash instance to play on"
+  ;;
+esac

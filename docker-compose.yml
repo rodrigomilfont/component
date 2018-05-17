@@ -1,0 +1,29 @@
+version: '3.6'
+services:
+  webpack:
+    image: component
+    build:
+      context: .
+    container_name: component-web
+    user: cargox
+    hostname: component
+    volumes:
+      - .:/component
+      - node_modules:/node_modules
+    command: yarn dev
+    depends_on:
+      - node_modules
+
+  node_modules:
+    image: busybox:latest
+    container_name: component-node-modules
+    volumes:
+      - /node_modules
+
+networks:
+  default:
+    driver: bridge
+    name: component
+
+volumes:
+  node_modules:

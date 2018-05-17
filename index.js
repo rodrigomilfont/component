@@ -13,15 +13,18 @@
 
 import Wel from './src/components/HelloWorld'
 import CxSpinner from './src/components/spinner/layout';
+import CxButton from './src/components/button/layout';
 
 // Install the components
 export function install (Vue) {
   Vue.component('Wel', Wel)
   Vue.component('CxSpinner', CxSpinner)
+  Vue.component('CxButton', CxButton)
 }
 
 // Expose the components
 export {
+  CxButton,
   CxSpinner,
   Wel
 }
