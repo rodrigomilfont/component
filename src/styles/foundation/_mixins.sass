@@ -1,0 +1,57 @@
+// Abstraction to make spaces (padding and margin)
+=make-space($kind, $prefix, $size, $important: null)
+  $props: (top, right, bottom, left)
+  $baseName: "#{$prefix}-#{$kind}"
+
+  .#{$baseName}
+    #{$kind}: $size $important
+
+  .#{$baseName}-heights
+    #{$kind}-top: $size $important
+    #{$kind}-bottom: $size $important
+
+  .#{$baseName}-sides
+    #{$kind}-left: $size $important
+    #{$kind}-right: $size $important
+
+  @each $prop in $props
+    .#{$baseName}-#{$prop}
+      #{$kind}-#{$prop}: $size $important
+
+=padding($prefix, $size, $important: null)
+  +make-space(padding, $prefix, $size, $important)
+
+=margin($prefix, $size, $important: null)
+  +make-space(margin, $prefix, $size, $important)
+
+=centralize-vertically
+  position: absolute
+  top: 50%
+  transform: translateY(-50%)
+
+=centralize-horizontally
+  left: 50%
+  position: absolute
+  transform: translateX(-50%)
+
+=centralize
+  left: 50%
+  position: absolute
+  top: 50%
+  transform: translate(-50%, -50%)
+
+@keyframes spinner
+  to
+    transform: rotate(360deg)
+
+=spinner
+  content: ''
+  box-sizing: border-box
+  display: inline-block
+  margin: 0 auto
+  width: 1em
+  height: 1em
+  border-radius: 50%
+  border: 0.125em solid transparent
+  border-top-color: $c-clicable
+  animation: spinner .6s linear infinite

@@ -1,1 +1,18 @@
-$white: #FFF
+@import "./src/styles/foundation/variables"
+@import "./src/styles/foundation/icons"
+@import "./src/styles/foundation/mixins"
+
++padding('default', $default-space, !important)
++margin('default', $default-space, !important)
+
++padding('small', $small-space, !important)
++margin('small', $small-space, !important)
+
++padding('tiny', $tiny-space, !important)
++margin('tiny', $tiny-space, !important)
+
+.display-inline-block
+  display: inline-block
+
+.text-strong
+  font-weight: $font-semi-bold
