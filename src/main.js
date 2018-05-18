@@ -19,6 +19,8 @@ import cxTable from './components/table/layout.vue'
 
 // Install the components
 export function install (Vue) {
+  console.log('install', this, arguments)
+
   Vue.component('cxButton', cxButton)
   Vue.component('cxSpinner', cxSpinner)
   Vue.component('cxTab', cxTab)
@@ -39,7 +41,7 @@ export {
 // Plugin
 const plugin = {
   /* eslint-disable no-undef */
-  version: VERSION,
+  version: '0',
   install
 }
 
