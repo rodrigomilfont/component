@@ -14,7 +14,7 @@
       td.cargo-td(:colspan="columns.length")
         .blank-state-wrapper.text-center
           .default-margin.clearfix
-            img(src='', alt='Filter')
+            img(src='./assets/filter.svg', alt='Filter')
           | {{ $t('app.table_no_results') }}
 </template>
 

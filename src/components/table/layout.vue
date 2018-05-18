@@ -26,7 +26,7 @@ import $ from 'jquery'
 import { EventTypes, EventBus } from '../../event_bus'
 import { debounce, defer } from 'lodash'
 
-import TableHeader from './_header.vue'
+import TableHeader from './_header'
 import TableBody from './_body.vue'
 import TableFooter from './_footer.vue'
 
